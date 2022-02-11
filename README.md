@@ -1,2 +1,2 @@
 # ComputerGraphics
-Компьютерная графика
+Компьютерная графика in Visual Studio
