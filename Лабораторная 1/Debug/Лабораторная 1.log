@@ -1,0 +1,14 @@
+﻿  main.cpp
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(187,69): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(188,69): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(195,69): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(196,71): warning C4244: =: преобразование "float" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(207,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(208,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(213,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(214,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(225,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(226,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(231,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\main.cpp(232,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+  Лабораторная 1.vcxproj -> C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\Debug\Лабораторная 1.exe
