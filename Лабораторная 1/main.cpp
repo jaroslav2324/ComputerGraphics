@@ -4,7 +4,7 @@
 #include <SDL.h>
 
 #define SHIFT_VALUE 10
-#define ROTATE_VALUE float(20) / 180
+#define ROTATE_VALUE double(20) / 180 * M_PI
 #define ADD_SCALE 0.2
 
 struct line {
@@ -23,6 +23,7 @@ void rotateClockwise(line* line);
 void rotateCounterclockwise(line* line);
 void increaseScale(line* line);
 void decreaseScale(line* line);
+void drawBresenhamLine(SDL_Renderer* ren, line* line);
 
 int main(int argc, char* argv[])
 {
@@ -45,7 +46,7 @@ int main(int argc, char* argv[])
 	struct line* line1 = new struct line;
 	struct line* line2 = new struct line;
 
-
+	/*basic values*/
 	line1->x1 = 100;
 	line1->y1 = 100;
 	line1->x2 = 100;
@@ -143,12 +144,12 @@ int main(int argc, char* argv[])
 void rerenderLines(SDL_Renderer* ren, line* line1, line* line2) {
 
 	SDL_RenderClear(ren);
-
+	
 	SDL_SetRenderDrawColor(ren, 0, 255, 255, 255);
 	SDL_RenderDrawLine(ren, line1->x1, line1->y1, line1->x2, line1->y2);
 
 	SDL_SetRenderDrawColor(ren, 255, 255, 0, 255);
-	SDL_RenderDrawLine(ren, line2->x1, line2->y1, line2->x2, line2->y2);
+	drawBresenhamLine(ren, line2);
 
 	SDL_SetRenderDrawColor(ren, 0, 0, 0, 255);
 
@@ -184,16 +185,16 @@ void shiftDown(line* line) {
 void rotateClockwise(line* line) {
 	int deltaX = line->x2 - line->x1;
 	int deltaY = line->y2 - line->y1;
-	line->x2 = deltaX * cos(ROTATE_VALUE) - deltaY * sin(ROTATE_VALUE) + line->x1;
-	line->y2 = deltaX * sin(ROTATE_VALUE) + deltaY * cos(ROTATE_VALUE) + line->y1;
+	line->x2 = round(deltaX * cos(ROTATE_VALUE) - deltaY * sin(ROTATE_VALUE) + line->x1);
+	line->y2 = round(deltaX * sin(ROTATE_VALUE) + deltaY * cos(ROTATE_VALUE) + line->y1);
 	return;
 }
 
 void rotateCounterclockwise(line* line) {
 	int deltaX = line->x2 - line->x1;
 	int deltaY = line->y2 - line->y1;
-	line->x2 = deltaX * cos(ROTATE_VALUE) + deltaY * sin(ROTATE_VALUE) + line->x1;
-	line->y2 = - deltaX * sin(ROTATE_VALUE) + deltaY * cos(ROTATE_VALUE) + line->y1;
+	line->x2 = round(deltaX * cos(ROTATE_VALUE) + deltaY * sin(ROTATE_VALUE) + line->x1);
+	line->y2 = round(- deltaX * sin(ROTATE_VALUE) + deltaY * cos(ROTATE_VALUE) + line->y1);
 	return;
 }
 
@@ -230,5 +231,92 @@ void decreaseScale(line* line) {
 
 	line->x2 = centerX + (1 - ADD_SCALE) * deltaX2;
 	line->y2 = centerY + (1 - ADD_SCALE) * deltaY2;
+	return;
+}
+
+/*draw line using Bresenham alorythm*/
+void drawBresenhamLine(SDL_Renderer* ren, line* line) {
+
+	int startX, startY, endX, endY;
+
+	/*find start and end point*/
+	if (line->x1 < line->x2) {
+		startX = line->x1;
+		startY = line->y1;
+		endX = line->x2;
+		endY = line->y2;
+	}
+	else if (line->x2 < line->x1) {
+		startX = line->x2;
+		startY = line->y2;
+		endX = line->x1;
+		endY = line->y1;
+	}
+	else{
+		if (line->y1 < line->y2) {
+			startX = line->x1;
+			startY = line->y1;
+			endX = line->x2;
+			endY = line->y2;
+		}
+		else {
+			startX = line->x2;
+			startY = line->y2;
+			endX = line->x1;
+			endY = line->y1;
+		}
+	}
+
+	int deltaX = endX - startX;
+	int deltaY = endY - startY;
+
+	double tang = 0; // tan of angle
+	double mistake = 0;
+
+	/*draw line*/
+	if (abs(deltaY) < abs(deltaX)) {
+
+		tang = (double)deltaY / (double)deltaX;
+
+		for (int x = startX, y = startY; x < endX; x++) {
+			SDL_RenderDrawPoint(ren, x, y);
+			mistake += tang;
+			if (tang > 0){
+				if (mistake > 0.5) {
+					y++;
+					mistake -= 1;
+				}
+			}
+			else {
+				if (mistake < -0.5) {
+					y--;
+					mistake += 1;
+				}
+			}
+		}
+	}
+	else {
+
+		tang = (double)deltaX / (double)deltaY;
+		if (startY < endY)
+			for (int y = startY, x = startX; y < endY; y++) {
+				SDL_RenderDrawPoint(ren, x, y);
+				mistake += tang;
+				if (mistake > 0.5) {
+						x++;
+						mistake -= 1;
+				}
+			}
+		else
+			for (int y = startY, x = startX; y > endY; y--) {
+				SDL_RenderDrawPoint(ren, x, y);
+				mistake += tang;
+				if (mistake < -0.5) {
+					x++;
+					mistake += 1;
+				}
+			}
+	}
+	
 	return;
 }
