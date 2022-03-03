@@ -24,6 +24,10 @@ void rotateCounterclockwise(line* line);
 void increaseScale(line* line);
 void decreaseScale(line* line);
 void drawBresenhamLine(SDL_Renderer* ren, line* line);
+void renderLetterA(SDL_Renderer* ren, int pointCoordX, int pointCoordY);
+void renderLetterB(SDL_Renderer* ren, int pointCoordX, int pointCoordY);
+void renderLetterC(SDL_Renderer* ren, int pointCoordX, int pointCoordY);
+void renderLetterD(SDL_Renderer* ren, int pointCoordX, int pointCoordY);
 
 int main(int argc, char* argv[])
 {
@@ -148,6 +152,12 @@ void rerenderLines(SDL_Renderer* ren, line* line1, line* line2) {
 	SDL_SetRenderDrawColor(ren, 0, 255, 255, 255);
 	SDL_RenderDrawLine(ren, line1->x1, line1->y1, line1->x2, line1->y2);
 
+	SDL_SetRenderDrawColor(ren, 255, 255, 255, 255);
+	renderLetterA(ren, line1->x1, line1->y1);
+	renderLetterB(ren, line1->x2, line1->y2);
+	renderLetterC(ren, line2->x1, line2->y1);
+	renderLetterD(ren, line2->x2, line2->y2);
+
 	SDL_SetRenderDrawColor(ren, 255, 255, 0, 255);
 	drawBresenhamLine(ren, line2);
 
@@ -202,17 +212,11 @@ void increaseScale(line* line) {
 	int centerX = (line->x1 + line->x2) / 2;
 	int centerY = (line->y1 + line->y2) / 2;
 
-	int deltaX1 = centerX - line->x1;
-	int deltaY1 = centerY - line->y1;
+	line->x1 = (line->x1 - centerX) * (1 + ADD_SCALE) + centerX;
+	line->x2 = (line->x2 - centerX) * (1 + ADD_SCALE) + centerX;
+	line->y1 = (line->y1 - centerY) * (1 + ADD_SCALE) + centerY;
+	line->y2 = (line->y2 - centerY) * (1 + ADD_SCALE) + centerY;
 
-	line->x1 = centerX - (1 + ADD_SCALE) * deltaX1;
-	line->y1 = centerY - (1 + ADD_SCALE) * deltaY1;
-
-	int deltaX2 = line->x2 - centerX;
-	int deltaY2 = line->y2 - centerY;
-
-	line->x2 = centerX + (1 + ADD_SCALE) * deltaX2;
-	line->y2 = centerY + (1 + ADD_SCALE) * deltaY2;
 	return;
 }
 
@@ -220,17 +224,11 @@ void decreaseScale(line* line) {
 	int centerX = (line->x1 + line->x2) / 2;
 	int centerY = (line->y1 + line->y2) / 2;
 
-	int deltaX1 = centerX - line->x1;
-	int deltaY1 = centerY - line->y1;
+	line->x1 = (line->x1 - centerX) * (1 - ADD_SCALE) + centerX;
+	line->x2 = (line->x2 - centerX) * (1 - ADD_SCALE) + centerX;
+	line->y1 = (line->y1 - centerY) * (1 - ADD_SCALE) + centerY;
+	line->y2 = (line->y2 - centerY) * (1 - ADD_SCALE) + centerY;
 
-	line->x1 = centerX - (1 - ADD_SCALE) * deltaX1;
-	line->y1 = centerY - (1 - ADD_SCALE) * deltaY1;
-
-	int deltaX2 = line->x2 - centerX;
-	int deltaY2 = line->y2 - centerY;
-
-	line->x2 = centerX + (1 - ADD_SCALE) * deltaX2;
-	line->y2 = centerY + (1 - ADD_SCALE) * deltaY2;
 	return;
 }
 
@@ -273,6 +271,7 @@ void drawBresenhamLine(SDL_Renderer* ren, line* line) {
 	double tang = 0; // tan of angle
 	double mistake = 0;
 
+	SDL_RenderDrawPoint(ren, startX, startY);
 	/*draw line*/
 	if (abs(deltaY) < abs(deltaX)) {
 
@@ -318,5 +317,53 @@ void drawBresenhamLine(SDL_Renderer* ren, line* line) {
 			}
 	}
 	
+	return;
+}
+
+/*render letter left from the point*/
+void renderLetterA(SDL_Renderer* ren, int pointCoordX, int pointCoordY) {
+
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY + 7, pointCoordX - 10, pointCoordY - 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 5, pointCoordY + 7, pointCoordX - 10, pointCoordY - 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 12, pointCoordY + 1, pointCoordX - 8, pointCoordY + 1);
+
+	return;
+}
+
+void renderLetterB(SDL_Renderer* ren, int pointCoordX, int pointCoordY) {
+
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY + 7, pointCoordX - 15, pointCoordY - 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY - 7, pointCoordX - 7, pointCoordY - 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 7, pointCoordY - 7, pointCoordX - 5, pointCoordY - 5);
+	SDL_RenderDrawLine(ren, pointCoordX - 5, pointCoordY - 5, pointCoordX - 5, pointCoordY - 2);
+	SDL_RenderDrawLine(ren, pointCoordX - 5, pointCoordY - 2, pointCoordX - 7, pointCoordY);
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY, pointCoordX - 7, pointCoordY);
+	SDL_RenderDrawLine(ren, pointCoordX - 7, pointCoordY, pointCoordX - 5, pointCoordY + 2);
+	SDL_RenderDrawLine(ren, pointCoordX - 5, pointCoordY + 2, pointCoordX - 5, pointCoordY + 5);
+	SDL_RenderDrawLine(ren, pointCoordX - 5, pointCoordY + 5, pointCoordX - 7, pointCoordY + 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY + 7, pointCoordX - 7, pointCoordY + 7);
+
+	return;
+}
+
+void renderLetterC(SDL_Renderer* ren, int pointCoordX, int pointCoordY) {
+
+	SDL_RenderDrawLine(ren, pointCoordX - 5, pointCoordY - 7, pointCoordX - 10, pointCoordY - 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 10, pointCoordY - 7, pointCoordX - 15, pointCoordY - 3);
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY + 3, pointCoordX - 15, pointCoordY - 3);
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY + 3, pointCoordX - 10, pointCoordY + 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 5, pointCoordY + 7, pointCoordX - 10, pointCoordY + 7);
+
+	return;
+}
+void renderLetterD(SDL_Renderer* ren, int pointCoordX, int pointCoordY) {
+
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY + 7, pointCoordX - 15, pointCoordY - 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY - 7, pointCoordX - 8, pointCoordY - 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 8, pointCoordY - 7, pointCoordX - 5, pointCoordY - 3);
+	SDL_RenderDrawLine(ren, pointCoordX - 5, pointCoordY - 3, pointCoordX - 5, pointCoordY + 3);
+	SDL_RenderDrawLine(ren, pointCoordX - 5, pointCoordY + 3, pointCoordX - 8, pointCoordY + 7);
+	SDL_RenderDrawLine(ren, pointCoordX - 15, pointCoordY + 7, pointCoordX - 8, pointCoordY + 7);
+
 	return;
 }
