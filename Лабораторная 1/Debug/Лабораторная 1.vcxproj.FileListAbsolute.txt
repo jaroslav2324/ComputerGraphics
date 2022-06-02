@@ -1,2 +1,0 @@
-C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\Debug\Лабораторная 1.exe
-C:\Users\HP\source\repos\ComputerGraphics\Лабораторная 1\Debug\Лабораторная 1.pdb
